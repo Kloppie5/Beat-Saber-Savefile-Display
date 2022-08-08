@@ -1,0 +1,23 @@
+<html>
+  <head>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="pretty-json.js"></script>
+    <script>
+      savefile = null;
+      async function loadSave ( event ) {
+        const file = event.target.files.item(0)
+        const contents = await file.text()
+        savefile = contents
+        savefile = JSON.parse(savefile)
+        savefiletree = new Tree("savefile", savefile)
+        savefiletree.render(document.getElementById('savefile-input'))
+      }
+    </script>
+  </head>
+  <body>
+    <input type="file" onchange="loadSave(event)"/><br>
+    <div id="savefile-input"></div>
+  </body>
+</html>
