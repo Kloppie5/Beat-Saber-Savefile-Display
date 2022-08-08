@@ -3,6 +3,7 @@
 
     <link rel="stylesheet" href="style.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="pretty-json.js"></script>
     <script>
       savefile = null;
@@ -11,13 +12,34 @@
         const contents = await file.text()
         savefile = contents
         savefile = JSON.parse(savefile)
-        savefiletree = new Tree("savefile", savefile)
-        savefiletree.render(document.getElementById('savefile-input'))
+        updatePlayerStats()
+        updateLevelStats()
       }
+      function updatePlayerStats ( ) {
+        playerstats = savefile.localPlayers[0].playerAllOverallStatsData.soloFreePlayOverallStatsData
+        console.log(playerstats)
+      }
+      function updateLevelStats ( ) {
+        levelstats = {}
+        for ( leveldata of savefile.localPlayers[0].levelsStatsData ) {
+          if ( !levelstats[leveldata.beatmapCharacteristicName] )
+            levelstats[leveldata.beatmapCharacteristicName] = {}
+
+          if ( !levelstats[leveldata.beatmapCharacteristicName][leveldata.levelId] )
+            levelstats[leveldata.beatmapCharacteristicName][leveldata.levelId] = {}
+
+          levelstats[leveldata.beatmapCharacteristicName][leveldata.levelId][leveldata.difficulty] = leveldata
+        }
+        for ( [levelid, leveldata] of Object.entries(levelstats) ) {
+          console.log(levelid)
+          console.log(leveldata)
+          $('#levelstats').append(`<div>${JSON.stringify(leveldata)}</div>`)
+        }
+    }
     </script>
   </head>
   <body>
     <input type="file" onchange="loadSave(event)"/><br>
-    <div id="savefile-input"></div>
+    <div id="levelstats"></div>
   </body>
 </html>
