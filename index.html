@@ -20,26 +20,80 @@
         console.log(playerstats)
       }
       function updateLevelStats ( ) {
-        levelstats = {}
         for ( leveldata of savefile.localPlayers[0].levelsStatsData ) {
-          if ( !levelstats[leveldata.beatmapCharacteristicName] )
-            levelstats[leveldata.beatmapCharacteristicName] = {}
-
-          if ( !levelstats[leveldata.beatmapCharacteristicName][leveldata.levelId] )
-            levelstats[leveldata.beatmapCharacteristicName][leveldata.levelId] = {}
-
-          levelstats[leveldata.beatmapCharacteristicName][leveldata.levelId][leveldata.difficulty] = leveldata
+          updateLevelStat(leveldata)
         }
-        for ( [levelid, leveldata] of Object.entries(levelstats) ) {
-          console.log(levelid)
-          console.log(leveldata)
-          $('#levelstats').append(`<div>${JSON.stringify(leveldata)}</div>`)
-        }
-    }
+      }
+      function updateLevelStat ( leveldata ) {
+        console.log(leveldata)
+        if ( leveldata.beatmapCharacteristicName != "Standard" )
+          return;
+        if ( leveldata.validScore )
+          return;
+        console.log(`${leveldata.levelId} ${leveldata.highScore}`)
+        //levelId: "DanceDance"
+        //difficulty: 4
+        //highScore: 684085
+        //validScore: true
+
+        //fullCombo: false
+        //maxRank: 4
+      }
+      /*
+      if (multipliedScore == maxMultipliedScore && modifiedScore >= multipliedScore)
+		{
+			return RankModel.Rank.SSS;
+		}
+		if (num2 > 0.9f)
+		{
+			return RankModel.Rank.SS;
+		}
+		if (num2 > 0.8f)
+		{
+			return RankModel.Rank.S;
+		}
+		if (num2 > 0.65f)
+		{
+			return RankModel.Rank.A;
+		}
+		if (num2 > 0.5f)
+		{
+			return RankModel.Rank.B;
+		}
+		if (num2 > 0.35f)
+		{
+			return RankModel.Rank.C;
+		}
+		if (num2 > 0.2f)
+		{
+			return RankModel.Rank.D;
+		}
+		return RankModel.Rank.E;
+      */
     </script>
   </head>
   <body>
     <input type="file" onchange="loadSave(event)"/><br>
-    <div id="levelstats"></div>
+    <table id="levelstats">
+      <tr>
+        <th>Level ID</th>
+        <th>Difficulty</th>
+        <th>Rank</th>
+        <th>Full Combo</th>
+        <th>High Score</th>
+        <th>Play Count</th>
+        <th>Valid Score</th>
+      </tr>
+    </table>
+    <div class="progress-bar">
+      <div class="progress-bar-filler rank-E"></div>
+      <div class="progress-bar-filler rank-D"></div>
+      <div class="progress-bar-filler rank-C"></div>
+      <div class="progress-bar-filler rank-B"></div>
+      <div class="progress-bar-filler rank-A"></div>
+      <div class="progress-bar-filler rank-S"></div>
+      <div class="progress-bar-filler rank-SS"></div>
+    </div>
+    <div class="rank">A</div>
   </body>
 </html>
